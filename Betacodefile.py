@@ -8,7 +8,7 @@ def codemaker():
     return code
 #correct
 def gokker():
-    gok = input("Voer in vier getallen 1-6: ")  # eerste gok
+    gok = input("Voer in vier getallen 1-6: ")
     return gok
 
 def codechecker (gok, code):
@@ -92,26 +92,30 @@ def codechecker2(gok, code, goktel):
     # else:  # na 10 beurten
     #     print("Beurten zijn op. Je hebt verloren. Het goeie antwoord was: " + code)
     # return [positiechecker, inwoordchecker]
-# def geen1en2():
+
+def eerstegok():
+    gok = 1122
+    simplestrategy2(gok)
 
 def simplestrategy2():
+    gok = 1122
     possible = []
     for x in range(1111, 6666):
         possible.append(str(x))
-    def eerstegok(possible):
         possible2 = []  # lijst na functie
-        gok = 1122
         print("Gok: " + str(gok))
         positie = str(input("Hoeveel getallen zitten goed? "))
         inwoord = str(input("Hoeveel getallen zitten in het woord? "))
         lst2 = [positie, inwoord]
         for nummercheck in possible:
             lst = woordchecker(str(gok), nummercheck)
+            print(lst)
             if lst2 == lst:
                 possible2.append(str(nummercheck))
+            possible = possible2
         print(possible2)
 
-    eerstegok(possible)
+
 
 def simplestrategy(): #met dank aan: https://en.wikipedia.org/wiki/Mastermind_(board_game)
     possible = []
