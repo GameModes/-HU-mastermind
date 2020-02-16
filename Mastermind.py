@@ -1,11 +1,12 @@
 import random
+import collections
 
 def codemaker():
     code = "" #lege code
     while len(code) != 4:  # vullen tot het 4 nummers bevat
         randnumber = random.randint(1, 6)  # getal kiezen tussen 1-6
         code += str(randnumber)
-    print("Code is: " + code)
+    print("Code is: " + code) #~verwijder~
     return code
 
 def gokker():
@@ -17,19 +18,23 @@ def gokker():
 def woordchecker (gok, code):
     positiechecker = 0 #waarde zit perfect in code
     inwoordchecker = 0 #waarde zit in code
-    tempcode = code #tijdelijke bewerkbare copy van de code
-    for number in range(4): #telt van 0 tot 3
-        if gok[number] == tempcode[number]: #als de nummer met de gelijke index hetzelfde is
-            positiechecker += 1 #waarde stijgt wanneer perfect erin zit
-            tempcode = list(tempcode) #maakt lijst van string per letter
-            tempcode[number] = "0" #maakt de gebruikte getal 0 om andere connecties te voorkomen
-            "".join(tempcode)#maakt er weer een string van
-    for number in range(4):
-        if gok[number] in str(tempcode) and not gok[number] == tempcode[number]: #voor getallen die alleen in het woord zitten
-            inwoordchecker += 1
-            tempcode = list(tempcode)
-            tempcode[number] = "0"
-            "".join(tempcode)
+    tempcode = collections.Counter(code)#Een tijdelijke lijst maken van de code
+    tempgok = collections.Counter(gok)#Een tijdelijke lijst maken van de gok
+    # for number in range(4): #telt van 0 tot 3
+    #     if gok[number] == tempcode[number]: #als de nummer met de gelijke index hetzelfde is
+    #         positiechecker += 1 #waarde stijgt wanneer perfect erin zit
+    #         tempcode = list(tempcode) #maakt lijst van string per letter
+    #         tempcode[number] = "0" #maakt de gebruikte getal 0 om andere connecties te voorkomen
+    #         "".join(tempcode)#maakt er weer een string van
+    # for number in range(4):
+    #     if gok[number] in str(tempcode) and not gok[number] == tempcode[number]: #voor getallen die alleen in het woord zitten
+    #         inwoordchecker += 1
+    #         tempcode = list(tempcode)
+    #         tempcode[number] = "0"
+    #         "".join(tempcode)
+    inwoordchecker = sum(min(tempcode[number], tempgok[number]) for number in tempcode) #telt alle keren wanneer het in de code is
+    positiechecker = sum(codenum == goknum for codenum, goknum in zip(tempcode, gok)) #telt alle keren wanneer het precies op de juiste plaats staat
+    inwoordchecker -= positiechecker #En het precieschecker eraf trekken bij de inwoordchecker omdat als het goed staat ook in het woord is, wat niet mag.
     return [str(positiechecker), str(inwoordchecker)]
 
 def codechecker(gok, code, goktel):
@@ -41,7 +46,7 @@ def codechecker(gok, code, goktel):
             print("In " + str(gok) + " zitten er " + str(lst[1]) + " in de code")
             codechecker(gokker(), code, goktel)
         else:
-            print(print("Beurten zijn op. Je hebt verloren. Het goeie antwoord was: " + code))
+            print("Beurten zijn op. Je hebt verloren. Het goeie antwoord was: " + code)
     else:
         print("Antwoord is goed! De code is inderdaad " + code)
 
@@ -64,7 +69,12 @@ def simplestrategy(gok, possible):
         if lst2 == lst:
             possible2.append(str(nummercheck))
         possible = possible2
-    simplestrategy(possible[0], possible)
+    print("alle mogelijkheden:" + str(possible)) #~verwijder~
+    if len(possible) > 4:
+        simplestrategy(possible[0], possible)
+    else:
+        print(possible[0] + "is het antwoord")
+
 
 def begin():
     keuze = input("Wil u gokken of naar een code feedback geven? ")
@@ -74,5 +84,10 @@ def begin():
         codechecker(gokker(), codemaker(), goktel)
     elif "feed" in keuze or "geven" in keuze:
         eerstegok()
+    opnikeuze = input("Opnieuw? ")
+    if 'ja' in opnikeuze or "Ja" in opnikeuze:
+        begin()
+    else:
+        print("bedankt voor het spelen!")
 
 begin()
