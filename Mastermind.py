@@ -15,7 +15,7 @@ def gokker():
     return gok
 
 #Tot nu toe zijn twee waardes ontstaan: Code, willekeurig getal & de gok
-def woordchecker (gok, code):
+def woordchecker (gok, code): #module collections heeft het maken van een lijst uit een string erg makkelijker gemaakt: https://stackabuse.com/introduction-to-pythons-collections-module/
     positiechecker = 0 #waarde zit perfect in code
     inwoordchecker = 0 #waarde zit in code
     tempcode = collections.Counter(code)#Een tijdelijke lijst maken van de code
@@ -51,12 +51,20 @@ def codechecker(gok, code, goktel):
         print("Antwoord is goed! De code is inderdaad " + code)
 
 def eerstegok():
-    gok = 1122
+    strategychoice = input("Welke strategy moet de computer gebruiken? Irving's? Knuth's? Neuwirth's? Willekeurig? ")
+    if "Wille" in strategychoice or "wille" in strategychoice:
+        strategychoice = str(random.randint(1, 3))  # getal kiezen tussen 1-6
+
+    if "Irv" in strategychoice or "irv" in strategychoice or "1" in strategychoice: #gebruik van Irving's strategy
+        gok = 1123
+    elif "Neu" in strategychoice or "neu" in strategychoice or "2" in strategychoice: #gebruik van Neuwirth's strategy
+        gok = 1234
+    else:   #gebruik van Knuth's strategy
+        gok = 1122
     possible = []
     for x in range(1111, 6666):  # alle mogelijke oplossingen
         possible.append(str(x))
     simplestrategy(gok, possible)
-
 
 def simplestrategy(gok, possible):
     possible2 = [] #lijst na functie
