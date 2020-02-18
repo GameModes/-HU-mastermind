@@ -35,6 +35,8 @@ def woordchecker (gok, code): #module collections heeft het maken van een lijst 
     for number in range(4):
         if tempcode[number] == tempgok[number]:
             positiechecker += 1
+            tempcode[number] = "9"  # maakt de gebruikte nummer 9 om nogmaals gebruik te voorkomen
+            "".join(tempcode)
         elif tempgok[number] in tempcode:
             tempcode = list(tempcode)
             tempcode[number] = "9" #maakt de gebruikte nummer 9 om nogmaals gebruik te voorkomen
@@ -56,7 +58,7 @@ def codechecker(gok, code, goktel):
         else:
             print("Beurten zijn op. Je hebt verloren. Het goeie antwoord was: " + code)
     else:
-        print("Antwoord is goed! De code is inderdaad " + code)
+        print("Antwoord is goed! In " + goktel + " beurten. De code is inderdaad " + code)
 
 def eerstegok(goktel):
     strategychoice = input("Welke strategy moet de computer gebruiken? Irving's? Knuth's? Neuwirth's? Willekeurig? ")
