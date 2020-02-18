@@ -6,11 +6,10 @@ def codemaker():
     while len(code) != 4:  # vullen tot het 4 nummers bevat
         randnumber = random.randint(1, 6)  # getal kiezen tussen 1-6
         code += str(randnumber)
-    print("Code is: " + code) #~verwijder~
+    # print("Code is: " + code) #~verwijder~
     return code
 
 def gokker():
-    gok = " "
     gok = input("Voer in vier getallen 1-6: ")  #gok code invoering
     return gok
 
@@ -18,8 +17,8 @@ def gokker():
 def woordchecker (gok, code): #module collections heeft het maken van een lijst uit een string erg makkelijker gemaakt: https://stackabuse.com/introduction-to-pythons-collections-module/
     positiechecker = 0 #waarde zit perfect in code
     inwoordchecker = 0 #waarde zit in code
-    tempcode = collections.Counter(code)#Een tijdelijke lijst maken van de code
-    tempgok = collections.Counter(gok)#Een tijdelijke lijst maken van de gok
+    tempcode = str(code)#Een tijdelijke lijst maken van de code
+    tempgok = str(gok)#Een tijdelijke lijst maken van de gok
     # for number in range(4): #telt van 0 tot 3
     #     if gok[number] == tempcode[number]: #als de nummer met de gelijke index hetzelfde is
     #         positiechecker += 1 #waarde stijgt wanneer perfect erin zit
@@ -31,15 +30,24 @@ def woordchecker (gok, code): #module collections heeft het maken van een lijst 
     #         inwoordchecker += 1
     #         tempcode = list(tempcode)
     #         tempcode[number] = "0"
-    #         "".join(tempcode)
-    inwoordchecker = sum(min(tempcode[number], tempgok[number]) for number in tempcode) #telt alle keren wanneer het in de code is
-    positiechecker = sum(codenum == goknum for codenum, goknum in zip(tempcode, gok)) #telt alle keren wanneer het precies op de juiste plaats staat
-    inwoordchecker -= positiechecker #En het precieschecker eraf trekken bij de inwoordchecker omdat als het goed staat ook in het woord is, wat niet mag.
+    #         "".join(tempcode) 123
+    # inwoordchecker = sum(min(tempcode[number], tempgok[number]) for number in tempcode) #telt alle keren wanneer het in de code is
+    for number in range(4):
+        if tempcode[number] == tempgok[number]:
+            positiechecker += 1
+        elif tempgok[number] in tempcode:
+            tempcode = list(tempcode)
+            tempcode[number] = "0"
+            "".join(tempcode)
+            inwoordchecker += 1
+
+    # positiechecker = sum(codenum == goknum for codenum, goknum in zip(tempcode, gok)) #telt alle keren wanneer het precies op de juiste plaats staat
+    # inwoordchecker -= positiechecker #En het precieschecker eraf trekken bij de inwoordchecker omdat als het goed staat ook in het woord is, wat niet mag.
     return [str(positiechecker), str(inwoordchecker)]
 
 def codechecker(gok, code, goktel):
-    if gok != code: #stopt bij aantal gokken 6
-        if goktel != 6: #wanneer de gok niet gelijk is aan de code
+    if gok != code: #wanneer de gok niet gelijk is aan de code
+        if goktel != 6: #stopt bij aantal gokken 6
             goktel += 1 #+1 gok
             lst = woordchecker(gok, code) #roept functie woordchecker om lst te krijgen
             print("In " + str(gok) + " zitten er " + str(lst[0]) + " goed")
@@ -50,23 +58,22 @@ def codechecker(gok, code, goktel):
     else:
         print("Antwoord is goed! De code is inderdaad " + code)
 
-def eerstegok():
+def eerstegok(goktel):
     strategychoice = input("Welke strategy moet de computer gebruiken? Irving's? Knuth's? Neuwirth's? Willekeurig? ")
     if "Wille" in strategychoice or "wille" in strategychoice:
         strategychoice = str(random.randint(1, 3))  # getal kiezen tussen 1-6
-
-    if "Irv" in strategychoice or "irv" in strategychoice or "1" in strategychoice: #gebruik van Irving's strategy
+    if "Irv" in strategychoice or "irv" in strategychoice or strategychoice == "1": #gebruik van Irving's strategy
         gok = 1123
-    elif "Neu" in strategychoice or "neu" in strategychoice or "2" in strategychoice: #gebruik van Neuwirth's strategy
+    elif "Neu" in strategychoice or "neu" in strategychoice or strategychoice == "2": #gebruik van Neuwirth's strategy
         gok = 1234
     else:   #gebruik van Knuth's strategy
         gok = 1122
     possible = []
-    for x in range(1111, 6666):  # alle mogelijke oplossingen
+    for x in range(1111, 6667):  # alle mogelijke oplossingen
         possible.append(str(x))
-    simplestrategy(gok, possible)
+    simplestrategy(gok, possible, goktel)
 
-def simplestrategy(gok, possible):
+def simplestrategy(gok, possible, goktel):
     possible2 = [] #lijst na functie
     print("Gok: " + str(gok))
     positie = str(input("Hoeveel getallen zitten goed? "))
@@ -77,11 +84,14 @@ def simplestrategy(gok, possible):
         if lst2 == lst:
             possible2.append(str(nummercheck))
         possible = possible2
-    print("alle mogelijkheden:" + str(possible)) #~verwijder~
-    if len(possible) > 4:
-        simplestrategy(possible[0], possible)
+    print(str(goktel+1) + ". alle mogelijkheden:" + str(possible)) #~verwijder~
+    if len(possible) > 1:
+        goktel += 1
+        simplestrategy(possible[0], possible, goktel)
+    elif goktel == 6:
+        print("Te vaak geprobeerd")
     else:
-        print(possible[0] + "is het antwoord")
+        print(possible[0] + " is het antwoord in " + str(goktel+1) + " beurten")
 
 
 def begin():
@@ -91,7 +101,11 @@ def begin():
         goktel = 0 #begint bij 0
         codechecker(gokker(), codemaker(), goktel)
     elif "feed" in keuze or "geven" in keuze:
-        eerstegok()
+        goktel = 0
+        eerstegok(goktel)
+    else:
+        print("Verkeerde invoer probeer opnieuw")
+        begin()
     opnikeuze = input("Opnieuw? ")
     if 'ja' in opnikeuze or "Ja" in opnikeuze:
         begin()
