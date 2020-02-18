@@ -17,8 +17,8 @@ def gokker():
 def woordchecker (gok, code): #module collections heeft het maken van een lijst uit een string erg makkelijker gemaakt: https://stackabuse.com/introduction-to-pythons-collections-module/
     positiechecker = 0 #waarde zit perfect in code
     inwoordchecker = 0 #waarde zit in code
-    tempcode = str(code)#Een tijdelijke lijst maken van de code
-    tempgok = str(gok)#Een tijdelijke lijst maken van de gok
+    tempcode = str(code)#Een tijdelijke string maken van de code
+    tempgok = str(gok)#Een tijdelijke string maken van de gok
     # for number in range(4): #telt van 0 tot 3
     #     if gok[number] == tempcode[number]: #als de nummer met de gelijke index hetzelfde is
     #         positiechecker += 1 #waarde stijgt wanneer perfect erin zit
@@ -37,7 +37,7 @@ def woordchecker (gok, code): #module collections heeft het maken van een lijst 
             positiechecker += 1
         elif tempgok[number] in tempcode:
             tempcode = list(tempcode)
-            tempcode[number] = "0"
+            tempcode[number] = "9" #maakt de gebruikte nummer 9 om nogmaals gebruik te voorkomen
             "".join(tempcode)
             inwoordchecker += 1
 
