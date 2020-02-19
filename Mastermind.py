@@ -19,29 +19,21 @@ def woordchecker (gok, code): #module collections heeft het maken van een lijst 
     inwoordchecker = 0 #waarde zit in code
     tempcode = str(code)#Een tijdelijke string maken van de code
     tempgok = str(gok)#Een tijdelijke string maken van de gok
-    # for number in range(4): #telt van 0 tot 3
-    #     if gok[number] == tempcode[number]: #als de nummer met de gelijke index hetzelfde is
-    #         positiechecker += 1 #waarde stijgt wanneer perfect erin zit
-    #         tempcode = list(tempcode) #maakt lijst van string per letter
-    #         tempcode[number] = "0" #maakt de gebruikte getal 0 om andere connecties te voorkomen
-    #         "".join(tempcode)#maakt er weer een string van
-    # for number in range(4):
-    #     if gok[number] in str(tempcode) and not gok[number] == tempcode[number]: #voor getallen die alleen in het woord zitten
-    #         inwoordchecker += 1
-    #         tempcode = list(tempcode)
-    #         tempcode[number] = "0"
-    #         "".join(tempcode) 123
-    # inwoordchecker = sum(min(tempcode[number], tempgok[number]) for number in tempcode) #telt alle keren wanneer het in de code is
     for number in range(4):
         if tempcode[number] == tempgok[number]:
             positiechecker += 1
-            tempcode[number] = "9"  # maakt de gebruikte nummer 9 om nogmaals gebruik te voorkomen
-            "".join(tempcode)
-        elif tempgok[number] in tempcode:
-            tempcode = list(tempcode)
-            tempcode[number] = "9" #maakt de gebruikte nummer 9 om nogmaals gebruik te voorkomen
-            "".join(tempcode)
+            if number == 0:
+                tempcode = "9" + tempcode[1:]
+            else:
+                tempcode = tempcode[:number] + "9" + tempcode[number + 1:]
+
+    for number in range(4):
+        if tempgok[number] in tempcode:
             inwoordchecker += 1
+            if tempcode.index(tempgok[number]) == 0:
+                tempcode = "9" + tempcode[1:]
+            else:
+                tempcode = tempcode[:tempcode.index(tempgok[number])] + "9" + tempcode[tempcode.index(tempgok[number]) + 1:]
 
     # positiechecker = sum(codenum == goknum for codenum, goknum in zip(tempcode, gok)) #telt alle keren wanneer het precies op de juiste plaats staat
     # inwoordchecker -= positiechecker #En het precieschecker eraf trekken bij de inwoordchecker omdat als het goed staat ook in het woord is, wat niet mag.
@@ -86,7 +78,7 @@ def simplestrategy(gok, possible, goktel):
         if lst2 == lst:
             possible2.append(str(nummercheck))
         possible = possible2
-    print(str(goktel+1) + ". alle mogelijkheden:" + str(possible)) #~verwijder~
+    print(str(goktel+1) + ". Alle mogelijkheden: " + str(possible)) #~verwijder~
     if len(possible) > 1:
         goktel += 1
         simplestrategy(possible[0], possible, goktel)
