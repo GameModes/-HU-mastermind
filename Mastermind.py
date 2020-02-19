@@ -35,8 +35,6 @@ def woordchecker (gok, code): #module collections heeft het maken van een lijst 
             else:
                 tempcode = tempcode[:tempcode.index(tempgok[number])] + "9" + tempcode[tempcode.index(tempgok[number]) + 1:]
 
-    # positiechecker = sum(codenum == goknum for codenum, goknum in zip(tempcode, gok)) #telt alle keren wanneer het precies op de juiste plaats staat
-    # inwoordchecker -= positiechecker #En het precieschecker eraf trekken bij de inwoordchecker omdat als het goed staat ook in het woord is, wat niet mag.
     return [str(positiechecker), str(inwoordchecker)]
 
 def codechecker(gok, code, goktel):
